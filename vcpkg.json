@@ -1,0 +1,25 @@
+{
+  "name": "your-project-name",
+  "builtin-baseline": "b633a4696a7674c2b3a6cf081f678ba960a047d4",
+  "version-string": "0.1.0",
+  "dependencies": [
+    "cppzmq",
+    "eigen3",
+    "fmt",
+    "gtest",
+    "nlohmann-json",
+    "nlopt",
+    "openssl",
+    "spdlog",
+    {
+      "name": "zeromq",
+      "default-features": false,
+      "version>=": "2023-06-20#1",
+      "features": [ "sodium" ]
+    },
+    {
+      "name": "websocketpp",
+      "features": [ "recommended" ]
+    }    
+  ]
+}
