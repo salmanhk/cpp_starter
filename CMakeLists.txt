@@ -16,26 +16,22 @@ function(find_duckdb)
 
   if(WIN32)
     set(DUCKDB_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/duckdb" CACHE PATH "Path to DuckDB include directory")
-    set(DUCKDB_PATH ${PROJECT_SOURCE_DIR}/extern/duckdb/windows-amd64/ CACHE PATH "Path to DuckDB library")
-    #find_library(DUCKDB_LIBRARY
-    #  NAMES duckdb 
-    #  PATHS 
-    #  ${PROJECT_SOURCE_DIR}/extern/duckdb/windows-amd64/
-    #  REQUIRED
-    #)
+    
+    set(DUCKDB_PATH_RELEASE ${PROJECT_SOURCE_DIR}/extern/duckdb/windows-amd64/release CACHE PATH "Path to DuckDB Release library")
+    set(DUCKDB_PATH_DEBUG ${PROJECT_SOURCE_DIR}/extern/duckdb/windows-amd64/debug CACHE PATH "Path to DuckDB Debug library")
+
+    set(DUCKDB_PATH "$<IF:$<CONFIG:Debug>,${DUCKDB_PATH_DEBUG},${DUCKDB_PATH_RELEASE}>" CACHE PATH "Path to DuckDB library")
   else()
     set(DUCKDB_PATH "/usr/local/lib" CACHE PATH "Path to DuckDB library")
   endif()
   
-  # Set the Linux-specific path where DuckDB is located
-  # Look for the .so file on Linux
   find_library(DUCKDB_LIBRARY
       NAMES duckdb
-      PATHS ${DUCKDB_PATH} 
+      PATHS ${DUCKDB_PATH} ${DUCKDB_PATH_RELEASE} ${DUCKDB_PATH_DEBUG}
       NO_DEFAULT_PATH
   )
 
-
+  #
   if(NOT DUCKDB_LIBRARY)
       message(FATAL_ERROR "Could not find DuckDB")
   else()
@@ -44,6 +40,7 @@ function(find_duckdb)
 
   set(DUCKDB_LIBRARY ${DUCKDB_LIBRARY} PARENT_SCOPE)
 endfunction()
+
 
 #
 add_compile_definitions(

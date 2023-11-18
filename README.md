@@ -9,6 +9,10 @@ This project is a C++ template designed to kickstart cross-platform development 
 - [Docker](https://www.docker.com/get-started) for containerization (required for Linux)
 - [Visual Studio Code](https://code.visualstudio.com/) with the [Remote - Containers extension](https://code.visualstudio.com/docs/remote/containers) for development
 
+## Caveats
+
+On Windows in Debug configuration, the project will compile but DuckDB calls will crash program at runtime. No problems otherwise.
+
 ## Getting Started
 
 To get started, clone the repository to your local machine using your preferred method.

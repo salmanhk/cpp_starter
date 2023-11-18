@@ -5,7 +5,6 @@ target_precompile_headers(lib_a PUBLIC ../include/lib_a_dir/pch.h)
 
 target_include_directories(lib_a PUBLIC
   ../include/lib_a_dir 
-  #${EIGEN3_INCLUDE_DIR}
   ${DUCKDB_INCLUDE_DIR}
 )
 
@@ -18,7 +17,6 @@ target_precompile_headers(lib_b REUSE_FROM lib_a)
 
 target_include_directories(lib_b PRIVATE 
   ../include/lib_b_dir 
-  #${EIGEN3_INCLUDE_DIR}
   ${DUCKDB_INCLUDE_DIR}
 )
 
@@ -30,7 +28,6 @@ add_executable(console console/main.cpp)
 target_precompile_headers(console REUSE_FROM lib_a)
 
 target_include_directories(console PRIVATE 
-  #${EIGEN3_INCLUDE_DIR} 
   ${NLOPT_INCLUDE_DIRS} 
   ${DUCKDB_INCLUDE_DIR}
   ${ZeroMQ_INCLUDE_DIRS} 
@@ -42,8 +39,13 @@ target_link_libraries(console PRIVATE
 
 # postbuild: only need this for windows
 if(CMAKE_SYSTEM_NAME STREQUAL Windows)
+    set(DUCKDB_DLL_DEBUG_PATH ${PROJECT_SOURCE_DIR}/extern/duckdb/windows-amd64/debug/duckdb.dll)
+    set(DUCKDB_DLL_RELEASE_PATH ${PROJECT_SOURCE_DIR}/extern/duckdb/windows-amd64/release/duckdb.dll)
+
+    # something not quite right with DuckDB Windows Debug. will result in runtime crash.
     add_custom_command(TARGET console POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E copy
-                    ${PROJECT_SOURCE_DIR}/extern/duckdb/windows-amd64/duckdb.dll 
+                    "$<IF:$<CONFIG:Debug>,${DUCKDB_DLL_DEBUG_PATH},${DUCKDB_DLL_RELEASE_PATH}>"
                     $<TARGET_FILE_DIR:console>)
 endif()
+
