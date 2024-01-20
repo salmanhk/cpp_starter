@@ -1,5 +1,5 @@
 ###
-add_library(lib_a STATIC lib_a_src/adder.cpp)
+add_library(lib_a STATIC lib_a_src/adder.cpp lib_a_src/kernel.cu)
 
 target_precompile_headers(lib_a PUBLIC ../include/lib_a_dir/pch.h)
 

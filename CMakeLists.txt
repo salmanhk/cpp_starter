@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(StarterProject)
+project(StarterProject CXX CUDA)
 
 #
 set(CMAKE_CXX_STANDARD 17)
@@ -62,6 +62,7 @@ elseif(UNIX AND NOT APPLE)
 endif()
 
 #
+find_package(CUDAToolkit REQUIRED)
 find_package(cppzmq CONFIG REQUIRED)
 find_package(Eigen3 CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)

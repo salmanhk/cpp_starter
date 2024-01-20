@@ -10,7 +10,30 @@
 #include <spdlog/spdlog.h>
 #include <zmq.hpp>
 
+#include "cuda_functions.h"
+
 std::atomic<bool> keepRunning(true);
+
+extern void addWithCuda(int* c, const int* a, const int* b, int size);
+
+//////////////
+void example_cudatest() {
+  std::cout << "Testing Cuda\n.";
+  const int arraySize = 5;
+  int a[arraySize] = { 1, 2, 3, 4, 5 };
+  int b[arraySize] = { 10, 20, 30, 40, 50 };
+  int c[arraySize] = { 0 };
+
+  // Add vectors in parallel.
+  addWithCuda(c, a, b, arraySize);
+
+  std::cout << "Result:";
+  for (int i = 0; i < arraySize; ++i) {
+    std::cout << " " << c[i];
+  }
+  std::cout << std::endl;
+  std::cout << "Testing Cuda ok\n.";
+}
 
 //////////////
 void example_duckdb() {
@@ -147,6 +170,8 @@ void spdlog_example()
 }
 
 int main() {
+
+    example_cudatest();
 
     std::thread server(server_thread);
     std::thread client(client_thread);
