@@ -27,7 +27,7 @@ RUN curl -L -o duckdb.tar.gz https://github.com/duckdb/duckdb/archive/refs/tags/
 RUN tar -xzf duckdb.tar.gz --strip-components=1
 RUN mkdir build && cd build && \
     cmake .. && \
-    make && \
+    make -j$(nproc) && \
     make install
 RUN rm -rf /build
 

@@ -62,7 +62,13 @@ elseif(UNIX AND NOT APPLE)
 endif()
 
 #
-find_package(CUDAToolkit REQUIRED)
+# Note: To set the "WITH_CUDA" variable see the CMakeSettings.json file
+if(WITH_CUDA)
+  message(STATUS "WITH CUDA: ${WITH_CUDA}")
+  enable_language(CUDA)
+  find_package(CUDAToolkit REQUIRED)
+endif()
+
 find_package(cppzmq CONFIG REQUIRED)
 find_package(Eigen3 CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)

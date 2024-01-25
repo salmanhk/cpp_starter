@@ -73,6 +73,9 @@ The project is ready to be used with Docker, especially when working on Linux. A
 
 For a smooth development experience in VSCode, open the repository in a Remote Container. This will ensure all dependencies and toolchains are set up exactly as they should be, regardless of your host system.
 
+## CUDA (not tested on Linux)
+There is a CUDA sample that can be compiled. The CUDA toolkit needs to be installed and discoverable by find_package. The WITH_CUDA variable can be set in the CMakeSettings.json file. This has not been tested on Linux.
+
 ## Cross-Platform Compatibility
 
 The project is designed to be cross-platform, compatible with both Windows and Linux. All scripts and code are prepared to be run on either operating system with no modifications needed.

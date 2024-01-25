@@ -1,5 +1,9 @@
 ###
-add_library(lib_a STATIC lib_a_src/adder.cpp lib_a_src/kernel.cu)
+add_library(lib_a STATIC lib_a_src/adder.cpp)
+
+if(WITH_CUDA)
+  target_sources(lib_a PRIVATE lib_a_src/kernel.cu)
+endif()
 
 target_precompile_headers(lib_a PUBLIC ../include/lib_a_dir/pch.h)
 
