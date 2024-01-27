@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(StarterProject CXX CUDA)
+project(StarterProject CXX)
 
 #
 set(CMAKE_CXX_STANDARD 17)
@@ -62,12 +62,13 @@ elseif(UNIX AND NOT APPLE)
 endif()
 
 #
-# Note: To set the "WITH_CUDA" variable see the CMakeSettings.json file
-if(WITH_CUDA)
+# Note: To set the "WITH_CUDA" variable see the CMakeSettings.json file. Will only apply to Windows machines
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows" AND WITH_CUDA)
   message(STATUS "WITH CUDA: ${WITH_CUDA}")
   enable_language(CUDA)
   find_package(CUDAToolkit REQUIRED)
 endif()
+
 
 find_package(cppzmq CONFIG REQUIRED)
 find_package(Eigen3 CONFIG REQUIRED)

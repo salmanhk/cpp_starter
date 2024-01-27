@@ -32,9 +32,9 @@ add_executable(console console/main.cpp)
 target_precompile_headers(console REUSE_FROM lib_a)
 
 target_include_directories(console PRIVATE 
-  ${NLOPT_INCLUDE_DIRS} 
-  ${DUCKDB_INCLUDE_DIR}
-  ${ZeroMQ_INCLUDE_DIRS} 
+   ${NLOPT_INCLUDE_DIRS} 
+   ${DUCKDB_INCLUDE_DIR}
+   ${ZeroMQ_INCLUDE_DIRS} 
 )
 
 target_link_libraries(console PRIVATE 
