@@ -1,6 +1,10 @@
 ###
 add_library(lib_a STATIC lib_a_src/adder.cpp)
 
+if(WITH_CUDA)
+  target_sources(lib_a PRIVATE lib_a_src/kernel.cu)
+endif()
+
 target_precompile_headers(lib_a PUBLIC ../include/lib_a_dir/pch.h)
 
 target_include_directories(lib_a PUBLIC
@@ -28,9 +32,9 @@ add_executable(console console/main.cpp)
 target_precompile_headers(console REUSE_FROM lib_a)
 
 target_include_directories(console PRIVATE 
-  ${NLOPT_INCLUDE_DIRS} 
-  ${DUCKDB_INCLUDE_DIR}
-  ${ZeroMQ_INCLUDE_DIRS} 
+   ${NLOPT_INCLUDE_DIRS} 
+   ${DUCKDB_INCLUDE_DIR}
+   ${ZeroMQ_INCLUDE_DIRS} 
 )
 
 target_link_libraries(console PRIVATE 

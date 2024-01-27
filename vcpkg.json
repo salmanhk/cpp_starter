@@ -1,6 +1,6 @@
 {
   "name": "your-project-name",
-  "builtin-baseline": "b633a4696a7674c2b3a6cf081f678ba960a047d4",
+  "builtin-baseline": "7032c5759f823fc8699a5c37d5f7072464ccb9a8",
   "version-string": "0.1.0",
   "dependencies": [
     "cppzmq",
@@ -9,12 +9,10 @@
     "gtest",
     "nlohmann-json",
     "nlopt",
-    "openssl",
     "spdlog",
     {
       "name": "zeromq",
       "default-features": false,
-      "version>=": "2023-06-20#1",
       "features": [ "sodium" ]
     },
     {

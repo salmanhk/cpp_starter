@@ -1,0 +1,45 @@
+## THIS IS A WORK IN PROGRESS. HAS PROBLEMS WITH OPENSSL REQUIERED
+## BY ZEROMQ
+
+FROM alpine:3.19.1
+
+## INSTALL PACKAGES
+# bash: weird openssl quirk
+# build-base: contains gcc, g++, make
+# libc6-compat: fixes vcpkg issues
+# linux-headers: fixes open-ssl issues
+RUN apk update && apk add --no-cache \
+    libc6-compat \
+    bash \
+    boost-dev \
+    build-base \
+    cmake \
+    curl \
+    dos2unix \
+    git \
+    linux-headers \
+    ninja \
+    openssl \
+    tar \
+    perl \
+    perl-app-cpanminus \
+    unzip \
+    zip 
+
+WORKDIR /workspaces
+
+## VCPKG
+RUN git clone https://github.com/microsoft/vcpkg.git && \
+    ./vcpkg/bootstrap-vcpkg.sh -disableMetrics && \
+    ./vcpkg/vcpkg integrate install
+
+## DUCKDB
+RUN mkdir duckdb && cd duckdb && \
+    curl -L -o duckdb.tar.gz https://github.com/duckdb/duckdb/archive/refs/tags/v0.9.2.tar.gz && \
+    tar -xzf duckdb.tar.gz --strip-components=1 && \
+    make -j$(nproc) GEN=ninja && \
+    cd build/release && \
+    ninja install && \
+    cd /workspaces && rm -rf /workspaces/duckdb
+
+ENV VCPKG_ROOT=/workspaces/vcpkg
