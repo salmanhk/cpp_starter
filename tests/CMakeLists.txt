@@ -1,4 +1,4 @@
-[[ TESTS ]]
+# [[ TESTS ]]
 
 include(GoogleTest)
 enable_testing()

@@ -1,23 +1,24 @@
 {
-  "name": "your-project-name",
-  "builtin-baseline": "7032c5759f823fc8699a5c37d5f7072464ccb9a8",
-  "version-string": "0.1.0",
-  "dependencies": [
-    "cppzmq",
-    "eigen3",
-    "fmt",
-    "gtest",
-    "nlohmann-json",
-    "nlopt",
-    "spdlog",
-    {
-      "name": "zeromq",
-      "default-features": false,
-      "features": [ "sodium" ]
-    },
-    {
-      "name": "websocketpp",
-      "features": [ "recommended" ]
-    }    
-  ]
-}
+    "name": "your-project-name",
+    "builtin-baseline": "7032c5759f823fc8699a5c37d5f7072464ccb9a8",
+    "version-string": "0.1.0",
+    "dependencies": [
+      "cppzmq",
+      "eigen3",
+      "fmt",
+      "gtest",
+      "nlohmann-json",
+      "nlopt",
+      "spdlog",
+      {
+        "name": "zeromq",
+        "default-features": false,
+        "features": [ "sodium" ]
+      },
+      {
+        "name": "websocketpp",
+        "features": [ "recommended" ]
+      }    
+    ]
+  }
+  

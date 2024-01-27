@@ -22,7 +22,7 @@ To get started, clone the repository to your local machine using your preferred 
 Before building the project, you need to configure it with the dependencies. Run the following script to configure the project:
 
 ```sh
-./configure.sh
+./scripts/configure.sh
 ```
 
 This script will set up the necessary configurations for building the project.
@@ -32,7 +32,7 @@ This script will set up the necessary configurations for building the project.
 To build the project, execute:
 
 ```sh
-./build.sh
+./scripts/build.sh
 ```
 
 This will compile the project and generate the required executables.
@@ -42,7 +42,7 @@ This will compile the project and generate the required executables.
 After building the project, you can run the main console application using:
 
 ```sh
-./run.sh
+./scripts/run.sh
 ```
 
 This script executes the compiled `console` executable.
@@ -52,7 +52,7 @@ This script executes the compiled `console` executable.
 To ensure your build passes all the tests, use the following command:
 
 ```sh
-./run_tests.sh
+./scripts/run_tests.sh
 ```
 
 This will execute the test suite defined in the project.
@@ -62,7 +62,7 @@ This will execute the test suite defined in the project.
 If you need to clean the build directory to start a fresh build, simply run:
 
 ```sh
-./clean.sh
+./scripts/clean.sh
 ```
 
 This script will delete the `build` directory, removing all compiled binaries and artifacts.

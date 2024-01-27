@@ -1,5 +1,18 @@
 cmake_minimum_required(VERSION 3.20)
-project(StarterProject CXX)
+project(StarterProject LANGUAGES CXX)
+
+# Note: To set the "WITH_CUDA" variable see the CMakeSettings.json file. Will only apply to Windows machines
+if(WIN32 AND WITH_CUDA)
+    message(STATUS "WITH CUDA: ${WITH_CUDA}")
+    enable_language(CUDA OPTIONAL)
+
+    # https://cmake.org/cmake/help/latest/prop_tgt/CUDA_STANDARD.html#prop_tgt:CUDA_STANDARD
+    set(CMAKE_CUDA_STANDARD 17)
+    set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+    find_package(CUDAToolkit REQUIRED)
+else()
+    message(STATUS "CUDA support is not available.")
+endif()
 
 #
 set(CMAKE_CXX_STANDARD 17)
@@ -59,14 +72,6 @@ if(WIN32)
   endif()
 elseif(UNIX AND NOT APPLE)
   set(VCPKG_TARGET_TRIPLET "x64-linux" CACHE STRING "Vcpkg target triplet")
-endif()
-
-#
-# Note: To set the "WITH_CUDA" variable see the CMakeSettings.json file. Will only apply to Windows machines
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows" AND WITH_CUDA)
-  message(STATUS "WITH CUDA: ${WITH_CUDA}")
-  enable_language(CUDA)
-  find_package(CUDAToolkit REQUIRED)
 endif()
 
 
