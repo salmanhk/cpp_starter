@@ -80,6 +80,19 @@ There is a CUDA sample that can be compiled. The CUDA toolkit needs to be instal
 
 The project is designed to be cross-platform, compatible with both Windows and Linux. All scripts and code are prepared to be run on either operating system with no modifications needed.
 
+If you see the following error while configuring the project on Windows:
+
+```
+Severity	Code	Description	Project	File	Line	Suppression State	Details
+Error		CMake Error at C:/vcpkg/scripts/buildsystems/vcpkg.cmake:899 (message):
+  vcpkg install failed.  See logs for more information:
+  C:\Users\sk\home\dev\repos_pn\starter_projects\cpp_starter\build\x64-win-debug\vcpkg-manifest-install.log		C:/vcpkg/scripts/buildsystems/vcpkg.cmake	899		
+```
+
+Go to your vcpkg directory and do a `git fetch`.
+
+
+
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
