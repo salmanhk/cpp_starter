@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+message TimeSeries {
+  repeated double data = 1;
+}
+
+message PlotData {
+  repeated TimeSeries series = 1;
+  repeated string legends = 2;
+  string title = 3;
+}

@@ -9,6 +9,7 @@
     "gtest",
     "nlohmann-json",
     "nlopt",
+    "protobuf",
     "spdlog",
     {
       "name": "zeromq",

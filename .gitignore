@@ -19,6 +19,10 @@
 .idea/
 .vscode/
 .vs/
+venv/
+.venv/
+extern/duckdb/windows-amd64/debug/
+*/__pycache__/
 
 ### CMake ###
 CMakeCache.txt

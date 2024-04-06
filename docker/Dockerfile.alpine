@@ -15,6 +15,9 @@ RUN apk update && apk add --no-cache \
     git \
     libc6-compat \
     linux-headers \
+    python3 \
+    py3-pip \
+    python3-dev \
     ninja \
     openssl \
     perl \
@@ -25,10 +28,15 @@ RUN apk update && apk add --no-cache \
 
 WORKDIR /workspaces
 
+RUN python3 -m venv /venv
+ENV PATH="/venv/bin:$PATH"
+RUN pip3 install --upgrade pip && \
+    pip3 install plotext protobuf
+
 ## VCPKG
-RUN git clone https://github.com/microsoft/vcpkg.git && \
-    ./vcpkg/bootstrap-vcpkg.sh -disableMetrics && \
-    ./vcpkg/vcpkg integrate install
+RUN git clone https://github.com/microsoft/vcpkg.git /vcpkg && \
+    /vcpkg/bootstrap-vcpkg.sh -disableMetrics && \
+    /vcpkg/vcpkg integrate install
 
 ## DUCKDB
 RUN mkdir duckdb && cd duckdb && \
@@ -39,4 +47,5 @@ RUN mkdir duckdb && cd duckdb && \
     ninja install && \
     cd /workspaces && rm -rf /workspaces/duckdb
 
-ENV VCPKG_ROOT=/workspaces/vcpkg
+ENV VCPKG_ROOT=/vcpkg
+

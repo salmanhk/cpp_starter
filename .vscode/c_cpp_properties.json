@@ -5,13 +5,22 @@
             "includePath": [
                 "${workspaceFolder}/include/**",
                 "${workspaceFolder}/src/**",
-                "${workspaceFolder}/build/vcpkg_installed/x64-linux/include"
+                "${workspaceFolder}/build/vcpkg_installed/x64-linux/include**"
             ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/include",
+                    "${workspaceFolder}/src"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c17",
             "cppStandard": "gnu++17",
-            "intelliSenseMode": "linux-gcc-x64"
+            "intelliSenseMode": "linux-gcc-x64",
+            "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
     "version": 4

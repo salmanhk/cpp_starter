@@ -25,6 +25,9 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
 endif()
 
 #
+include(${CMAKE_SOURCE_DIR}/Scripts/SetupPythonEnv.cmake)
+
+#
 function(find_duckdb)
 
   if(WIN32)
@@ -74,7 +77,6 @@ elseif(UNIX AND NOT APPLE)
   set(VCPKG_TARGET_TRIPLET "x64-linux" CACHE STRING "Vcpkg target triplet")
 endif()
 
-
 find_package(cppzmq CONFIG REQUIRED)
 find_package(Eigen3 CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
@@ -86,6 +88,19 @@ find_package(Threads REQUIRED)
 find_package(websocketpp CONFIG REQUIRED)
 find_package(ZeroMQ CONFIG REQUIRED)
 find_duckdb()
+
+# Protobuf
+find_package(Protobuf CONFIG REQUIRED)
+set(PROTO_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/proto)
+file(GLOB PROTO_FILES "${PROTO_SOURCE_DIR}/*.proto")
+set(PROTOC_EXECUTABLE ${Protobuf_PROTOC_EXECUTABLE})
+set(GENERATED_PROTOBUF_PATH "${CMAKE_SOURCE_DIR}/build/protobufs")
+file(MAKE_DIRECTORY ${GENERATED_PROTOBUF_PATH})
+
+# path to python scripts
+set(SCRIPTS_DIR ${CMAKE_SOURCE_DIR}/scripts)
+add_compile_definitions(SCRIPTS_DIR="${SCRIPTS_DIR}")
+add_compile_definitions(VENV_DIR="${CMAKE_SOURCE_DIR}/venv/scripts")
 
 #
 add_subdirectory(src)

@@ -1,0 +1,4 @@
+numpy==1.26.4
+pandas==2.2.1
+plotext==5.2.8
+protobuf==5.26.1
