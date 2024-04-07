@@ -198,7 +198,7 @@ int example_plot() {
   PlotData plotData;
   plotData.set_title("Cumulative Sum of Normal Distributions");
 
-  // Generate 3 series of cumulative sum normal random numbers
+  // generate 3 series of cumulative sum normal random numbers
   for (int i = 0; i < 3; ++i) {
     auto series = plotData.add_series();
     auto values = generateCumulativeSumNormalDist(
@@ -208,33 +208,40 @@ int example_plot() {
     }
   }
 
-  // Add legends
+  // legends
   *plotData.add_legends() = "Series 1";
   *plotData.add_legends() = "Series 2";
   *plotData.add_legends() = "Series 3";
 
-  // Serialize plotData to a string
+  // serialize 
   std::string serializedData;
   if (!plotData.SerializeToString(&serializedData)) {
     std::cerr << "Failed to serialize data.\n";
     return -1;
   }
 
-#if defined(_WIN32)
-  std::string command = VENV_DIR "\\python.exe " SCRIPTS_DIR "\\myplot.py ";
-#else
-  std::string command = "python " SCRIPTS_DIR "/myplot.py";
-#endif
+  std::string tempFilePath =
+      VENV_DIR "/temp_plot_data.bin"; 
 
-  FILE *pipe = popen(command.c_str(), "w");
-  if (!pipe) {
-    std::cerr << "Failed to open pipe to Python script.\n";
+  std::ofstream tempFile(tempFilePath, std::ios::binary | std::ios::out);
+  if (!tempFile.write(serializedData.data(), serializedData.size())) {
+    std::cerr << "Failed to write serialized data to temp file.\n";
     return -1;
   }
-  fwrite(serializedData.data(), sizeof(char), serializedData.size(), pipe);
-  pclose(pipe);
+  tempFile.close();
 
-  google::protobuf::ShutdownProtobufLibrary(); // Optional: Shut down protobuf
+#if defined(_WIN32)
+  std::string command =
+      VENV_DIR "\\python.exe " SCRIPTS_DIR "\\myplot.py " + tempFilePath;
+  std::cout << command << '\n';
+#else
+  std::string command = "python " SCRIPTS_DIR "/myplot.py " + tempFilePath;
+#endif
+
+  system(command.c_str());
+  std::remove(tempFilePath.c_str());
+
+  google::protobuf::ShutdownProtobufLibrary();
 
   return 0;
 }
@@ -274,6 +281,7 @@ int main() {
   example_duckdb();
 #endif
 
+  //
   example_plot();
 
   std::cout << "press any key to exit\n";

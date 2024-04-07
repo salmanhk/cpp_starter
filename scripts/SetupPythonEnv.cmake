@@ -1,41 +1,52 @@
-# IN-TERMINAL PLOTTING WITH PYTHON
 set(VENV_PATH "${CMAKE_SOURCE_DIR}/venv")
 
-# Check the platform and set the Python executable accordingly
 if(WIN32)
-  set(PYTHON_EXECUTABLE "py")
+  set(VENV_SUBDIR "Scripts")
+  set(PYTHON_EXECUTABLE_NAME "python.exe")
 else()
-  set(PYTHON_EXECUTABLE "python3")
+  set(VENV_SUBDIR "bin")
+  set(PYTHON_EXECUTABLE_NAME "python3")
 endif()
 
-# Check if the virtual environment already exists
-if(NOT EXISTS "${VENV_PATH}/Scripts")
-  # if virtual environment does not exist, so create it
-  execute_process(
-    COMMAND ${PYTHON_EXECUTABLE} -m venv ${VENV_PATH}
-    RESULT_VARIABLE VENV_CREATION_RESULT
-  )
-  
-  # check if the virtual environment was created successfully
-  if(NOT VENV_CREATION_RESULT STREQUAL "0")
-    message(FATAL_ERROR "Failed to create the virtual environment.")
+add_compile_definitions(VENV_DIR="${CMAKE_SOURCE_DIR}/venv/${VENV_SUBDIR}")
+
+set(PIP_EXECUTABLE "${VENV_PATH}/${VENV_SUBDIR}/pip")
+set(PYTHON_EXECUTABLE "${VENV_PATH}/${VENV_SUBDIR}/${PYTHON_EXECUTABLE_NAME}")
+
+# check if the platform-specific venv directory exists
+if(NOT EXISTS "${VENV_PATH}/${VENV_SUBDIR}")
+  # we assume that some version of python already exists on the system
+  if(WIN32)
+    find_program(SYSTEM_PYTHON_EXECUTABLE NAMES python python3 python.exe python3.exe)
+  else()
+    set(SYSTEM_PYTHON_EXECUTABLE "python3")
+  endif()
+
+  if(SYSTEM_PYTHON_EXECUTABLE STREQUAL "SYSTEM_PYTHON_EXECUTABLE-NOTFOUND")
+    message(FATAL_ERROR "System Python executable not found.")
+  else()
+    # create venv with system python executable
+    execute_process(
+      COMMAND ${SYSTEM_PYTHON_EXECUTABLE} -m venv ${VENV_PATH}
+      RESULT_VARIABLE VENV_CREATION_RESULT
+    )
+
+    if(NOT VENV_CREATION_RESULT STREQUAL "0")
+      message(FATAL_ERROR "Failed to create the virtual environment.")
+    endif()
   endif()
 endif()
 
-# Define pip executable path based on the platform
-if(WIN32)
-  set(PIP_EXECUTABLE "${VENV_PATH}/Scripts/pip")
-else()
-  set(PIP_EXECUTABLE "${VENV_PATH}/bin/pip")
-endif()
-
-# install the dependencies using pip from the virtual environment
+# install deps with venv pip
 execute_process(
   COMMAND ${PIP_EXECUTABLE} install -r "${CMAKE_SOURCE_DIR}/requirements.txt"
   RESULT_VARIABLE PIP_INSTALL_RESULT
+  OUTPUT_VARIABLE PIP_INSTALL_OUTPUT
+  ERROR_VARIABLE PIP_INSTALL_ERROR
 )
 
-# check if the dependencies were installed successfully
 if(NOT PIP_INSTALL_RESULT STREQUAL "0")
-  message(FATAL_ERROR "Failed to install the required Python packages.")
+  message(FATAL_ERROR "Failed to install the required Python packages. Error: ${PIP_INSTALL_ERROR}")
+else()
+  message(STATUS "Successfully installed Python packages: ${PIP_INSTALL_OUTPUT}")
 endif()

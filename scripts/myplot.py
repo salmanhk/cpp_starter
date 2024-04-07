@@ -16,8 +16,18 @@ def plot_time_series(plot_data):
     plt.title(plot_data.title)
     plt.show()
 
+
 if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python myplot.py <temp_file_path>")
+        sys.exit(1)
+    
+    temp_file_path = sys.argv[1]
+    with open(temp_file_path, "rb") as f:
+        serialized_data = f.read()
+
     plot_data = PlotData()
-    plot_data.ParseFromString(sys.stdin.buffer.read())
+    plot_data.ParseFromString(serialized_data)
     plot_time_series(plot_data)
+
 

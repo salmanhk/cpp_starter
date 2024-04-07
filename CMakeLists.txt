@@ -25,7 +25,7 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
 endif()
 
 #
-include(${CMAKE_SOURCE_DIR}/Scripts/SetupPythonEnv.cmake)
+include(${CMAKE_SOURCE_DIR}/scripts/SetupPythonEnv.cmake)
 
 #
 function(find_duckdb)
@@ -100,7 +100,6 @@ file(MAKE_DIRECTORY ${GENERATED_PROTOBUF_PATH})
 # path to python scripts
 set(SCRIPTS_DIR ${CMAKE_SOURCE_DIR}/scripts)
 add_compile_definitions(SCRIPTS_DIR="${SCRIPTS_DIR}")
-add_compile_definitions(VENV_DIR="${CMAKE_SOURCE_DIR}/venv/scripts")
 
 #
 add_subdirectory(src)

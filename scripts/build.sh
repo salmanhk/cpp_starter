@@ -6,4 +6,4 @@ BUILD_DIR="$PROJECT_ROOT/build"
 if [ ! -d "$BUILD_DIR" ]; then
     mkdir "$BUILD_DIR"
 fi
-cmake --build "$BUILD_DIR" --config Debug
+cmake --build "$BUILD_DIR" --config Release
