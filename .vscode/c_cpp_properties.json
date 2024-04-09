@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/include/**",
                 "${workspaceFolder}/src/**",
-                "${workspaceFolder}/build/vcpkg_installed/x64-linux/include**"
+                "${workspaceFolder}/build/vcpkg_installed/x64-linux/include**",
+                "${workspaceFolder}/build/protobufs**"
             ],
             "browse": {
                 "path": [

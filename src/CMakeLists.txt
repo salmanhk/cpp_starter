@@ -26,7 +26,11 @@ foreach(PROTO_FILE IN LISTS PROTO_FILES)
 endforeach()
 
 ###
-add_library(lib_a STATIC lib_a_src/adder.cpp)
+file(GLOB PROTOBUF_SRC_FILES "${GENERATED_PROTOBUF_PATH}/*.cc")
+
+###
+file(GLOB LIB_A_SOURCES "lib_a_src/*.cpp")
+add_library(lib_a STATIC ${LIB_A_SOURCES} ${PROTOBUF_SRC_FILES})
 
 if(WITH_CUDA)
   target_sources(lib_a PRIVATE lib_a_src/kernel.cu)
@@ -37,9 +41,10 @@ target_precompile_headers(lib_a PUBLIC ../include/lib_a_dir/pch.h)
 target_include_directories(lib_a PUBLIC
   ../include/lib_a_dir 
   ${DUCKDB_INCLUDE_DIR}
+  ${GENERATED_PROTOBUF_PATH}
 )
 
-target_link_libraries(lib_a PRIVATE NLopt::nlopt ${DUCKDB_LIBRARY})
+target_link_libraries(lib_a PRIVATE NLopt::nlopt ${DUCKDB_LIBRARY} ${Protobuf_LIBRARIES})
 
 ###
 add_library(lib_b STATIC lib_b_src/subtractor.cpp)
@@ -49,12 +54,12 @@ target_precompile_headers(lib_b REUSE_FROM lib_a)
 target_include_directories(lib_b PRIVATE 
   ../include/lib_b_dir 
   ${DUCKDB_INCLUDE_DIR}
+  ${GENERATED_PROTOBUF_PATH}
 )
 
 target_link_libraries(lib_b PRIVATE NLopt::nlopt ${DUCKDB_LIBRARY})
 
 ###
-file(GLOB PROTOBUF_SRC_FILES "${GENERATED_PROTOBUF_PATH}/*.cc")
 add_executable(console console/main.cpp ${PROTOBUF_SRC_FILES})
 
 target_precompile_headers(console REUSE_FROM lib_a )
@@ -67,7 +72,7 @@ target_include_directories(console PRIVATE
 )
 
 target_link_libraries(console PRIVATE 
-  lib_a lib_b cppzmq-static libzmq-static NLopt::nlopt fmt::fmt ${DUCKDB_LIBRARY} ${Protobuf_LIBRARIES}
+  lib_a lib_b cppzmq-static libzmq-static NLopt::nlopt fmt::fmt ${DUCKDB_LIBRARY} 
 )
 
 # postbuild: only need this for windows

@@ -1,24 +1,19 @@
 // File: src_dir/console/main.cpp
 
-#include "adder.h"
 #include "pch.h"
 
 #include "duckdb.hpp"
-#include "plot.pb.h"
 #include <filesystem>
 #include <fmt/core.h>
 #include <spdlog/spdlog.h>
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/server.hpp>
 #include <zmq.hpp>
+#include "helpers.h"
+#include "plotting.h"
 
 #ifdef __CUDACC__
 #include "cuda_functions.h"
-#endif
-
-#if defined(_WIN32)
-#define popen _popen
-#define pclose _pclose
 #endif
 
 std::atomic<bool> keepRunning(true);
@@ -177,7 +172,8 @@ void spdlog_example() {
   spdlog::debug("This is a debug message.");
 }
 
-int example_plot() {
+int example_plot_1() {
+
   auto generateCumulativeSumNormalDist =
       [](int n, double mean, double stddev) -> std::vector<double> {
     std::random_device rd;
@@ -193,55 +189,23 @@ int example_plot() {
     return values;
   };
 
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  PlotData plotData;
-  plotData.set_title("Cumulative Sum of Normal Distributions");
-
   // generate 3 series of cumulative sum normal random numbers
-  for (int i = 0; i < 3; ++i) {
-    auto series = plotData.add_series();
-    auto values = generateCumulativeSumNormalDist(
-        100, 0, 1); // 100 data points, mean=0, stddev=1
-    for (auto value : values) {
-      series->add_data(value);
-    }
+  std::vector<std::vector<double>> data;
+  for (int i = 0; i < 3; i++) {
+    auto values = generateCumulativeSumNormalDist(100, 0, 1);
+    data.push_back(values);
   }
 
-  // legends
-  *plotData.add_legends() = "Series 1";
-  *plotData.add_legends() = "Series 2";
-  *plotData.add_legends() = "Series 3";
+  plot_lines(data, 
+    std::vector<std::string>{"Series 1", "Series 2", "Series 3"}, 
+    std::string{"Cumulative Sum of Normal Distributions"});
 
-  // serialize 
-  std::string serializedData;
-  if (!plotData.SerializeToString(&serializedData)) {
-    std::cerr << "Failed to serialize data.\n";
-    return -1;
-  }
+///////////////////////////
+  Eigen::MatrixXd M = std_vec_to_eigen_matrix(data);
 
-  std::string tempFilePath =
-      VENV_DIR "/temp_plot_data.bin"; 
-
-  std::ofstream tempFile(tempFilePath, std::ios::binary | std::ios::out);
-  if (!tempFile.write(serializedData.data(), serializedData.size())) {
-    std::cerr << "Failed to write serialized data to temp file.\n";
-    return -1;
-  }
-  tempFile.close();
-
-#if defined(_WIN32)
-  std::string command =
-      VENV_DIR "\\python.exe " SCRIPTS_DIR "\\myplot.py " + tempFilePath;
-  std::cout << command << '\n';
-#else
-  std::string command = "python " SCRIPTS_DIR "/myplot.py " + tempFilePath;
-#endif
-
-  system(command.c_str());
-  std::remove(tempFilePath.c_str());
-
-  google::protobuf::ShutdownProtobufLibrary();
+  plot_lines(M, 
+    std::vector<std::string>{"Series 1", "Series 2", "Series 3"}, 
+    std::string{"Plot of Eigen data structure"});
 
   return 0;
 }
@@ -258,9 +222,6 @@ int main() {
   client.join();
   keepRunning = false;
   server.join();
-
-  int result = lib_a::adder(5, 4);
-  std::cout << "The result of 5 + 4 is " << result << std::endl;
 
   //
   eigen_example();
@@ -282,7 +243,7 @@ int main() {
 #endif
 
   //
-  example_plot();
+  example_plot_1();
 
   std::cout << "press any key to exit\n";
   std::cin.get();
