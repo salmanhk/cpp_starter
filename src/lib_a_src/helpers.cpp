@@ -1,5 +1,3 @@
-// File: src_dir/lib_a_src/adder.cpp
-
 #include "helpers.h"
 
 Eigen::MatrixXd std_vec_to_eigen_matrix(const std::vector<std::vector<double>>& vv)
@@ -7,11 +5,9 @@ Eigen::MatrixXd std_vec_to_eigen_matrix(const std::vector<std::vector<double>>& 
   auto nc = vv.size();
   auto nr = vv[0].size();
   Eigen::MatrixXd M = Eigen::MatrixXd::Zero(nr, nc);
-  for (int c = 0; c < nc; c++) {
-    for (int r = 0; r < nr; r++) {
+  for (int c = 0; c < nc; c++)
+    for (int r = 0; r < nr; r++)
       M(r, c) = vv[c][r];
-    }
-  }
 
   return M;    
 }
@@ -27,6 +23,3 @@ eigen_matrix_to_std_vec(const Eigen::Ref<Eigen::MatrixXd> M)
 
     return vv;
 }
-
-
-
